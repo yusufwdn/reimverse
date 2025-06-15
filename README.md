@@ -205,6 +205,11 @@ Jalankan perintah ini untuk menginstall seluruh dependensi yang dibutuhkan oleh 
 npm install
 ```
 
+Copy file `.env.local.example` menjadi file `.env.local.example`.
+```bash
+cp ..env.local.example .env.local.example
+```
+
 Setelah itu, jalankan frontend dengan perintah
 ```bash
 npm run dev
