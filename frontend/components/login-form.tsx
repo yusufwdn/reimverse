@@ -52,12 +52,12 @@ export default function LoginForm() {
       //   }
       // }
 
-      console.log("Login response:", data) // Debug log
+      // console.log("Login response:", data)
 
       // Store token and user info
       login(data.token, data.user);
 
-      console.log("After login, user role:", data.user.role) // Debug log
+      // console.log("After login, user role:", data.user.role)
 
       // Redirect based on user role
       switch (data.user.role) {

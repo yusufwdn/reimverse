@@ -25,6 +25,7 @@ export interface Reimbursement {
   amount: number;
   status: "pending" | "approved" | "rejected";
   receipt_path: string;
+  receipt_url: string;
   approved_at: string;
   created_at: string;
   updated_at: string;

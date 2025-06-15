@@ -89,6 +89,7 @@ class ManagerReimbursementController extends Controller
         
         try {
             $reimbursement->status = 'rejected';
+            $reimbursement->reason = $request->reason;
             $reimbursement->save();
             
             // Log activity

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 
 class Reimbursement extends Model
 {
@@ -28,6 +29,7 @@ class Reimbursement extends Model
         'receipt_path',
         'submitted_at',
         'approved_at',
+        'reason',
     ];
 
     /**
@@ -40,6 +42,13 @@ class Reimbursement extends Model
         'submitted_at' => 'datetime',
         'approved_at' => 'datetime',
     ];
+
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ['receipt_url'];
 
     /**
      * Get the user that owns reimbursement.
@@ -79,5 +88,17 @@ class Reimbursement extends Model
     public function scopeRejected($query)
     {
         return $query->where('status', 'rejected');
+    }
+
+    /**
+     * Additional attribute in this model
+     * @return string|null
+     */
+    public function getReceiptUrlAttribute()
+    {
+        if ($this->receipt_path) {
+            return Storage::url($this->receipt_path);
+        }
+        return null;
     }
 }

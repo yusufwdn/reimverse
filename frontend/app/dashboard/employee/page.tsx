@@ -44,7 +44,6 @@ export default function EmployeeDashboard() {
     };
 
     if (!isLoading) {
-      console.log(user, "current user");
       if (!user) {
         router.push("/");
       }
@@ -53,7 +52,7 @@ export default function EmployeeDashboard() {
     if (token) {
       fetchReimbursements();
     }
-  }, [token]);
+  }, [token, showForm]);
 
   const handleNewReimbursement = (newReimbursement: Reimbursement) => {
     setReimbursements([newReimbursement, ...reimbursements]);

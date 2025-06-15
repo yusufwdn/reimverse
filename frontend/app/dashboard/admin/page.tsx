@@ -20,8 +20,8 @@ export default function AdminDashboard() {
     const fetchAllReimbursements = async () => {
       try {
         const url = showDeleted
-          ? `${process.env.NEXT_PUBLIC_API_URL}/reimbursements?with_trashed=true`
-          : `${process.env.NEXT_PUBLIC_API_URL}/reimbursements`;
+          ? `${process.env.NEXT_PUBLIC_API_URL}/admin/reimbursements?with_trashed=true`
+          : `${process.env.NEXT_PUBLIC_API_URL}/admin/reimbursements`;
 
         const response = await fetch(url, {
           headers: {
@@ -44,7 +44,6 @@ export default function AdminDashboard() {
     };
 
     if (!isLoading) {
-      console.log(user, user?.role, "!isLoading");
       if (!user || user.role !== "admin") {
         router.push("/");
       }
@@ -56,9 +55,13 @@ export default function AdminDashboard() {
   }, [token, showDeleted]);
 
   const filteredReimbursements = reimbursements.filter((reimbursement) => {
+    // return reimbursement
     if (filterStatus === "all") return true;
     return reimbursement.status === filterStatus;
   });
+
+  // console.log(reimbursements, 'reimbursements')
+  // console.log(filteredReimbursements, 'filteredReimbursements')
 
   const getStatusBadgeClass = (status: string) => {
     switch (status) {

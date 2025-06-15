@@ -2,9 +2,9 @@
 
 import type React from "react";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "@/context/auth-context";
-import type { Reimbursement } from "@/types/reimbursement";
+import type { Category, Reimbursement } from "@/types/reimbursement";
 
 interface ReimbursementFormProps {
   onSuccess: (reimbursement: Reimbursement) => void;
@@ -21,6 +21,39 @@ export default function ReimbursementForm({
   const [file, setFile] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
+
+  const [categories, setCategories] = useState<Category[]>([]);
+
+  useEffect(() => {
+    const getCategories = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/categories`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch reimbursements");
+        }
+
+        const result = await response.json();
+        const categories = result.data;
+
+        // console.log(categories, "categories");
+
+        setCategories(categories);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    getCategories();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,7 +90,7 @@ export default function ReimbursementForm({
       formData.append("title", title);
       formData.append("description", description);
       formData.append("amount", amount);
-      formData.append("category", category);
+      formData.append("category_id", category);
       formData.append("receipt", file);
 
       const response = await fetch(
@@ -72,7 +105,11 @@ export default function ReimbursementForm({
       );
 
       if (!response.ok) {
-        throw new Error("Failed to submit reimbursement request");
+        const errorResponse = await response.json();
+        console.log(errorResponse, "errorResponse");
+        throw new Error(
+          errorResponse.message ?? "Failed to submit reimbursement request"
+        );
       }
 
       const newReimbursement = await response.json();
@@ -124,7 +161,7 @@ export default function ReimbursementForm({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label htmlFor="amount" className="form-label">
-            Amount ($)
+            Amount (Rp)
           </label>
           <input
             id="amount"
@@ -150,11 +187,11 @@ export default function ReimbursementForm({
             required
           >
             <option value="">Select a category</option>
-            <option value="travel">Travel</option>
-            <option value="meals">Meals</option>
-            <option value="supplies">Office Supplies</option>
-            <option value="equipment">Equipment</option>
-            <option value="other">Other</option>
+            {categories.map((category: Category, index) => (
+              <option value={category.id} key={index}>
+                {category.name}
+              </option>
+            ))}
           </select>
         </div>
       </div>

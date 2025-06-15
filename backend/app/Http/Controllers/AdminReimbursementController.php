@@ -39,6 +39,7 @@ class AdminReimbursementController extends Controller
             $query->withTrashed();
         }
 
+        // get reimbursement data with limit 50 data
         $reimbursements = $query->orderBy('created_at', 'desc')->paginate(50);
 
         return response()->json($reimbursements);
