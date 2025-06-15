@@ -43,7 +43,7 @@ Sistem backend RESTful API untuk manajemen reimbursement karyawan yang dibangun 
 
 ### Core Framework
 - **Laravel 12** - PHP Framework
-- **PHP 8.2+** - Programming Language
+- **PHP 8.3+** - Programming Language
 - **MySQL 8.0+** - Database
 
 ### Authentication & Security
@@ -102,8 +102,9 @@ php artisan key:generate
 ```
 
 ### 5. Buat Database
+Buat database di MySQL dengan nama `db_reimbursement`
 ```sql
-CREATE DATABASE db_reimbursement CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE db_reimbursement;
 ```
 
 ### 6. Konfigurasi Database & Email

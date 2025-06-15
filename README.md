@@ -116,13 +116,18 @@ Pendekatan ini memastikan logika bisnis tetap **konsisten**, **terpusat**, dan *
 
 - PHP >= 8.3  
 - Composer  
-- MySQL >= 8.0  
+- MySQL >= 8.0
 - Node.js >= 18  
 - Git
 
 ### 🚀 Backend (`/backend`)
 ```bash
-git clone <repository-url>
+git clone https://github.com/yusufwdn/reimverse.git
+```
+
+Setelah projek di-clone, pastikan masuk ke direktori projek tersebut.
+```bash
+cd reimverse
 ```
 
 Masuk ke folder backend, lalu instal dependensi bawaan Laravel dengan Composer.
@@ -139,7 +144,7 @@ composer require laravel/sanctum
 php artisan vendor:publish --provider="Laravel\\Sanctum\\SanctumServiceProvider"
 ```
 
-Buat database di MySQL dengan perintah berikut.
+Buat database di MySQL dengan nama `db_reimbursement` atau bisa langsung dilakukan dengan menyalin dan menjalankan perintah berikut.
 ```sql
 CREATE DATABASE db_reimbursement;
 ```
@@ -160,7 +165,7 @@ DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
 DB_DATABASE=db_reimbursement
-DB_USERNAME=your_userbane
+DB_USERNAME=your_username
 DB_PASSWORD=your_password
 
 MAIL_MAILER=smtp
@@ -207,7 +212,7 @@ npm install
 
 Copy file `.env.local.example` menjadi file `.env.local.example`.
 ```bash
-cp ..env.local.example .env.local.example
+cp .env.local.example .env.local.example
 ```
 
 Setelah itu, jalankan frontend dengan perintah
