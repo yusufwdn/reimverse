@@ -8,12 +8,12 @@ export function middleware(request: NextRequest) {
   const isPublicPath = path === "/";
 
   // Get the token from cookies
-  // const token = request.cookies.get("auth_token")?.value || "";
+  const token = request.cookies.get("auth_token")?.value || "";
 
   // Redirect to login if accessing protected route without token
-  // if (!isPublicPath && !token) {
-  //   return NextResponse.redirect(new URL("/", request.url));
-  // }
+  if (!isPublicPath && !token) {
+    return NextResponse.redirect(new URL("/", request.url));
+  }
 
   // Allow access to public paths even if authenticated
   return NextResponse.next();

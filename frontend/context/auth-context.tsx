@@ -1,5 +1,7 @@
 "use client";
 
+import Cookies from 'js-cookie';
+
 import {
   createContext,
   useContext,
@@ -21,7 +23,6 @@ interface AuthContextType {
   login: (token: string, user: User) => void;
   logout: () => void;
   isAuthenticated: boolean;
-  // isLoading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -33,8 +34,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     // Check if we have a token in localStorage
-    const storedToken = localStorage.getItem("auth_token");
-    const storedUser = localStorage.getItem("auth_user");
+    // const storedToken = localStorage.getItem("auth_token");
+    // const storedUser = localStorage.getItem("auth_user");
+
+    // Check if we have a token in cookies
+    const storedToken = Cookies.get("auth_token")
+    const storedUser = Cookies.get("auth_user")
+
     console.log("Checking stored auth:", { storedToken, storedUser }); // Debug log
 
     if (storedToken && storedUser) {
@@ -42,11 +48,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const parsedUser = JSON.parse(storedUser);
         setToken(storedToken);
         setUser(parsedUser);
-        console.log("Restored user from localStorage:", parsedUser); // Debug log
       } catch (error) {
         console.error("Failed to parse auth data from localStorage", error);
-        localStorage.removeItem("auth_token");
-        localStorage.removeItem("auth_user");
+        // localStorage.removeItem("auth_token");
+        // localStorage.removeItem("auth_user");
+        Cookies.remove("auth_token");
+        Cookies.remove("auth_user");
       } finally { }
     }
 
@@ -58,8 +65,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     setToken(newToken);
     setUser(newUser);
-    localStorage.setItem("auth_token", newToken);
-    localStorage.setItem("auth_user", JSON.stringify(newUser));
+    
+    // localStorage.setItem("auth_token", newToken);
+    // localStorage.setItem("auth_user", JSON.stringify(newUser));
+
+    // set cookies for 7 days
+    Cookies.set("auth_token", newToken, { expires: 7 });
+    Cookies.set("auth_user", JSON.stringify(newUser), { expires: 7 });
 
     console.log("User and token set in context") // Debug log
   };
@@ -68,8 +80,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     console.log("Logout function called") // Debug log
     setToken(null);
     setUser(null);
-    localStorage.removeItem("auth_token");
-    localStorage.removeItem("auth_user");
+
+    // localStorage.removeItem("auth_token");
+    // localStorage.removeItem("auth_user");
+
+    Cookies.remove("auth_token");
+    Cookies.remove("auth_user");
   };
 
   const value = {
@@ -80,7 +96,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     isAuthenticated: !!token,
   };
 
-  console.log("Auth context value:", value) // Debug log
+  // console.log("Auth context value:", value) // Debug log
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
